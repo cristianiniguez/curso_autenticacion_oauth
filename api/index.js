@@ -15,4 +15,15 @@ app.post('/api/auth/token', (req, res) => {
   res.json({ token });
 });
 
+app.get('/api/auth/verify', (req, res, next) => {
+  const { access_token } = req.query;
+
+  try {
+    const decoded = jwt.verify(access_token, config.authJwtSecret);
+    res.json({ message: 'Valid Access Token', username: decoded.sub });
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.listen(port, () => console.log(`Listening on localhost:${port}`));
