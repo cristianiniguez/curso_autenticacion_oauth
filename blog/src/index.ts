@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
+import { URLSearchParams } from 'url';
 import request from 'request';
-import querystring from 'querystring';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
@@ -44,13 +44,13 @@ app.get('/', async function (req, res) {
 app.get('/login', function (req, res) {
   const state = generateRandomString(16);
 
-  const queryString = querystring.stringify({
+  const queryString = new URLSearchParams({
     response_type: 'code',
     client_id: config.spotify.clientId,
     scope: scopesArray.join(' '),
     redirect_uri: config.spotify.redirectUri,
     state,
-  });
+  }).toString();
 
   res.cookie('auth_state', state, { httpOnly: true });
   res.redirect(`https://accounts.spotify.com/authorize?${queryString}`);
