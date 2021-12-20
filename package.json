@@ -1,0 +1,26 @@
+{
+  "name": "platzi-autenticacion",
+  "private": true,
+  "workspaces": [
+    "api",
+    "blog"
+  ],
+  "version": "1.0.0",
+  "description": "Curso de Autenticación con OAuth 2.0",
+  "scripts": {
+    "start:api": "npm run start --workspace=api",
+    "build:api": "npm run build --workspace=api",
+    "dev:api": "npm run dev --workspace=api",
+    "start:blog": "npm run start --workspace=blog",
+    "build:blog": "npm run build --workspace=blog",
+    "dev:blog": "npm run dev --workspace=blog"
+  },
+  "keywords": [],
+  "author": "cristianiniguez <felizpc1@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.7.0",
+    "@typescript-eslint/parser": "^5.7.0",
+    "eslint": "^8.5.0"
+  }
+}

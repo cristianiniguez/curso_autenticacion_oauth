@@ -1,7 +1,7 @@
-const express = require('express');
-const jwt = require('jsonwebtoken');
+import express from 'express';
+import jwt from 'jsonwebtoken';
 
-const { config } = require('./config');
+import config from './config';
 
 const app = express();
 const port = 5000;
@@ -19,7 +19,7 @@ app.get('/api/auth/verify', (req, res, next) => {
   const { access_token } = req.query;
 
   try {
-    const decoded = jwt.verify(access_token, config.authJwtSecret);
+    const decoded = jwt.verify(access_token as string, config.authJwtSecret);
     res.json({ message: 'Valid Access Token', username: decoded.sub });
   } catch (error) {
     next(error);

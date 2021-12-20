@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index",
+    "build": "tsc",
     "dev": "nodemon index"
   },
   "keywords": [],
@@ -16,6 +17,7 @@
     "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.6",
     "nodemon": "^2.0.15"
   }
 }
