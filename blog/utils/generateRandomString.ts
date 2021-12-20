@@ -1,7 +1,7 @@
-function generateRandomString(length) {
+function generateRandomString(length: number) {
   const possibleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz132456789';
   const randomString = Array(length)
-    .fill((_) => possibleChars.charAt(Math.floor(Math.random() * possibleChars.length)))
+    .fill(() => possibleChars.charAt(Math.floor(Math.random() * possibleChars.length)))
     .join('');
   return randomString;
 }
