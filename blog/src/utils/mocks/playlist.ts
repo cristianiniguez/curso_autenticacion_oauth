@@ -61,4 +61,4 @@ const playlistsMocks = [
   },
 ];
 
-module.exports = playlistsMocks;
+export default playlistsMocks;

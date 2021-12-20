@@ -6,4 +6,4 @@ function generateRandomString(length: number) {
   return randomString;
 }
 
-module.exports = generateRandomString;
+export default generateRandomString;
