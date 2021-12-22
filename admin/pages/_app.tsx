@@ -1,8 +1,9 @@
-import React from 'react';
 import App from 'next/app';
 
 import HtmlHead from '../layout/HtmlHead';
 import AppLayout from '../layout/AppLayout';
+
+import 'semantic-ui-css/semantic.min.css';
 
 export default class CustomApp extends App {
   static async getInitialProps({ Component, ctx }) {

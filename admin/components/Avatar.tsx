@@ -1,21 +1,19 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import { FC } from 'react';
 import { Image } from 'semantic-ui-react';
 
-const Avatar = ({ picture, name }) => (
+type AvatarProps = {
+  picture?: string;
+  name?: string;
+};
+
+const Avatar: FC<AvatarProps> = ({
+  picture = 'https://react.semantic-ui.com/images/avatar/large/elliot.jpg',
+  name,
+}) => (
   <span className='avatar'>
     <Image src={picture} avatar alt='Avatar' />
     {name}
   </span>
 );
-
-Avatar.propTypes = {
-  picture: PropTypes.string.isRequired,
-  name: PropTypes.string,
-};
-
-Avatar.defaultProps = {
-  picture: 'https://react.semantic-ui.com/images/avatar/large/elliot.jpg',
-};
 
 export default Avatar;

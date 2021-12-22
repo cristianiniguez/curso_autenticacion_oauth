@@ -1,19 +1,26 @@
-import React from "react";
-import PropTypes from "prop-types";
+import { FC } from 'react';
 
-import AppNavbar from "./AppNavbar";
-import AppFooter from "./AppFooter";
+import AppNavbar from './AppNavbar';
+import AppFooter from './AppFooter';
 
-import {
-  generalStyles,
-  visibilityStyles,
-  semanticStyles
-} from "../utils/globalStyles";
+import { generalStyles, visibilityStyles, semanticStyles } from '../utils/globalStyles';
+import { User } from '../types';
 
-const Layout = ({ children, isAuthenticated, loggedUser }) => (
-  <div className="layout">
+type LayoutProps = {
+  isAuthenticated?: boolean;
+  loggedUser?: User;
+};
+
+const defaultLoggedUser = { name: 'Guillermo Rodas', email: 'me@guillermorodas.com' };
+
+const Layout: FC<LayoutProps> = ({
+  children,
+  isAuthenticated = false,
+  loggedUser = defaultLoggedUser,
+}) => (
+  <div className='layout'>
     <AppNavbar loggedUser={loggedUser} />
-    <main className="layout-content">{children}</main>
+    <main className='layout-content'>{children}</main>
     <AppFooter />
     <style jsx global>
       {generalStyles}
@@ -26,16 +33,5 @@ const Layout = ({ children, isAuthenticated, loggedUser }) => (
     </style>
   </div>
 );
-
-Layout.propTypes = {
-  children: PropTypes.node.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired,
-  loggedUser: PropTypes.object.isRequired
-};
-
-Layout.defaultProps = {
-  isAuthenticated: false,
-  loggedUser: { name: 'Guillermo Rodas', email: 'me@guillermorodas.com' }
-};
 
 export default Layout;
