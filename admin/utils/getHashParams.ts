@@ -1,9 +1,9 @@
 function getHashParams() {
-  const hashParams = {};
+  const hashParams: { [key: string]: string } = {};
   const r = /([^&;=]+)=?([^&;]*)/g;
   const q = window.location.hash.substring(1);
 
-  let e;
+  let e: RegExpExecArray | null;
   while ((e = r.exec(q))) {
     hashParams[e[1]] = decodeURIComponent(e[2]);
   }
