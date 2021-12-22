@@ -9,7 +9,7 @@ export default class AuthService {
     const state = generateRandomString(16);
     localStorage.setItem('auth_state', state);
 
-    let url = 'https://accounts.spotify.authorize';
+    let url = 'https://accounts.spotify.com/authorize';
     url += '?response_type=token';
     url += '&client_id=' + encodeURIComponent(process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID as string);
     url += '&scope=' + encodeURIComponent(scopesArray.join(' '));
@@ -64,9 +64,9 @@ export default class AuthService {
       Authorization: `Bearer ${accessToken}`,
     };
 
-    return Axios('https://api.spotify.com/v1/me', { headers }).then(({ data: { profile } }) => {
-      this.setProfile(profile);
-      return profile;
+    return Axios('https://api.spotify.com/v1/me', { headers }).then(({ data }) => {
+      this.setProfile(data);
+      return data;
     });
   };
 
