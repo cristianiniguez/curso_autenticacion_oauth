@@ -1,14 +1,14 @@
-import React from "react";
-import Link from "next/link";
+import React from 'react';
+import Link from 'next/link';
 
 const Logo = () => (
-  <Link href="/">
-    <a className="logo">
-      <figure className="logo__figure">
+  <Link href='/'>
+    <a className='logo'>
+      <figure className='logo__figure'>
         <img
-          className="logo__image"
-          src="/static/logo/felida-music-white@2x.png"
-          alt="Felida Music | Admin"
+          className='logo__image'
+          src='/logo/felida-music-white@2x.png'
+          alt='Felida Music | Admin'
         />
         <style jsx>{`
           .logo__figure {
