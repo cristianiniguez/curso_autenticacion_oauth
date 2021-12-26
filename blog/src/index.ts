@@ -29,6 +29,8 @@ app.set('view engine', 'pug');
 
 function getUserInfo(accessToken: string): Promise<any | null> {
   if (!accessToken) {
+    console.log(accessToken);
+
     return Promise.resolve(null);
   }
 
@@ -83,6 +85,7 @@ app.get('/', async function (req, res, next) {
       playlists: { items: playlistMock },
     });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 });
