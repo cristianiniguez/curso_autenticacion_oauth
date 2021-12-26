@@ -34,9 +34,9 @@ class Layout extends Component<LayoutProps, LayoutState> {
       this.setState({
         isAuthenticated: true,
         loggedUser: {
-          name: profile.display_name,
+          name: profile.display_name || profile.name,
           email: profile.email,
-          picture: profile && profile.images && profile.images[0]?.url,
+          picture: profile.picture,
         },
       });
     } else {

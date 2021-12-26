@@ -1,23 +1,19 @@
-import Axios from 'axios';
+import auth0 from 'auth0-js';
 
-import generateRandomString from '../utils/generateRandomString';
-import getHashParams from '../utils/getHashParams';
 import scopesArray from '../utils/scopesArray';
 
 export default class AuthService {
+  private auth0 = new auth0.WebAuth({
+    domain: process.env.NEXT_PUBLIC_AUTH0_DOMAIN as string,
+    clientID: process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID as string,
+    audience: process.env.NEXT_PUBLIC_AUTH0_API_AUDIENCE,
+    redirectUri: process.env.NEXT_PUBLIC_AUTH0_REDIRECT_URL,
+    responseType: 'token id_token',
+    scope: scopesArray.join(' '),
+  });
+
   login = () => {
-    const state = generateRandomString(16);
-    localStorage.setItem('auth_state', state);
-
-    let url = 'https://accounts.spotify.com/authorize';
-    url += '?response_type=token';
-    url += '&client_id=' + encodeURIComponent(process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID as string);
-    url += '&scope=' + encodeURIComponent(scopesArray.join(' '));
-    url +=
-      '&redirect_uri=' + encodeURIComponent(process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URI as string);
-    url += '&state=' + encodeURIComponent(state);
-
-    window.location.href = url;
+    this.auth0.authorize();
   };
 
   logout = () => {
@@ -30,27 +26,28 @@ export default class AuthService {
 
   handleAuthentication = () => {
     return new Promise<string>((resolve, reject) => {
-      const { access_token, state } = getHashParams();
-      const auth_state = localStorage.getItem('auth_state');
+      this.auth0.parseHash((err, authResult) => {
+        if (err) {
+          console.log('Error parsing hash in Auth0 service');
+          return reject(err);
+        }
 
-      if (state === null || state !== auth_state) {
-        reject(new Error("The state doesn't match"));
-      }
-
-      localStorage.removeItem('auth_state');
-
-      if (access_token) {
-        this.setSession({ accessToken: access_token, expiresIn: 1000 });
-        return resolve(access_token);
-      } else {
-        return reject(new Error('The token is invalid'));
-      }
+        if (authResult && authResult.accessToken && authResult.idToken) {
+          this.setSession({
+            expiresIn: authResult.expiresIn as number,
+            accessToken: authResult.accessToken,
+            idToken: authResult.idToken,
+          });
+          return resolve(authResult.accessToken);
+        }
+      });
     }).then((accessToken) => this.handleUserInfo(accessToken));
   };
 
-  setSession = (authResult: { expiresIn: number; accessToken: string }) => {
+  setSession = (authResult: { expiresIn: number; accessToken: string; idToken: string }) => {
     const expiresAt = JSON.stringify(authResult.expiresIn * 1000 + new Date().getTime());
     localStorage.setItem('access_token', authResult.accessToken);
+    localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
   };
 
@@ -60,13 +57,18 @@ export default class AuthService {
   };
 
   handleUserInfo = (accessToken: string) => {
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-    };
+    return new Promise((resolve, reject) => {
+      this.auth0.client.userInfo(accessToken, (err, profile) => {
+        if (err) {
+          console.log('Error getting user info in Auth0 service');
+          return reject(err);
+        }
 
-    return Axios('https://api.spotify.com/v1/me', { headers }).then(({ data }) => {
-      this.setProfile(data);
-      return data;
+        if (profile) {
+          this.setProfile(profile);
+          return resolve(profile);
+        }
+      });
     });
   };
 
